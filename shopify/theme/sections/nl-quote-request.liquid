@@ -1,0 +1,99 @@
+{%- comment -%}
+  Quote request form (general, from a product page via ?product=handle, or from the cart via ?from=cart).
+  Uses Shopify's built-in contact form: submissions are emailed to the store's sender email
+  (Settings → Notifications → Sender email) and are free on every plan.
+  Limitation: Shopify contact forms cannot accept file uploads, so customers are asked to email
+  photos/plans to the store email (see SHOPIFY_SETUP.md for optional upload apps).
+  Install: Online Store → Themes → Edit code → Sections → Add a new section "nl-quote-request",
+  paste this file, then create page "Quote" (handle: quote) using a page template containing this section.
+{%- endcomment -%}
+<div class="page-width nl-form-section">
+  <h1 class="h1">{{ section.settings.heading }}</h1>
+  {%- if section.settings.intro != blank -%}<div class="rte nl-intro">{{ section.settings.intro }}</div>{%- endif -%}
+
+  {%- form 'contact', id: 'nl-quote-form', class: 'nl-form' -%}
+    {%- if form.posted_successfully? -%}
+      <p class="nl-success" role="status" tabindex="-1">Thanks — your quote request has been received. We usually reply within one business day.</p>
+    {%- else -%}
+      {%- if form.errors -%}<div class="nl-error" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
+      <input type="hidden" name="contact[Form]" value="Quote request">
+      <fieldset>
+        <legend>Your details</legend>
+        <div class="nl-grid">
+          <label>Full name *<input name="contact[Name]" required autocomplete="name" value="{{ customer.name }}"></label>
+          <label>Email *<input type="email" name="contact[email]" required autocomplete="email" value="{{ customer.email }}"></label>
+          <label>Phone *<input type="tel" name="contact[Phone]" required autocomplete="tel" value="{{ customer.phone }}"></label>
+          <label>Company<input name="contact[Company]" autocomplete="organization"></label>
+          <label>I am a…
+            <select name="contact[Customer type]"><option>Homeowner</option><option>Contractor / trade</option><option>Business / property manager</option><option>Designer / architect</option></select>
+          </label>
+          <label>Preferred contact method
+            <select name="contact[Preferred contact]"><option>Email</option><option>Phone call</option><option>Text message</option></select>
+          </label>
+          <label class="nl-span">Project address *<input name="contact[Project address]" required autocomplete="street-address"></label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Products</legend>
+        <label class="nl-span">Products required *<textarea name="contact[Products requested]" rows="4" required data-products placeholder="e.g. Waterproof vinyl for a 700 sq. ft. basement, stair nosing for 13 steps…"></textarea></label>
+        <div class="nl-grid">
+          <label>Preferred colours / styles<input name="contact[Styles]"></label>
+          <label>Quantities<input name="contact[Quantities]"></label>
+          <label class="nl-span">Measurements / square footage<input name="contact[Measurements]"></label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Project details</legend>
+        <div class="nl-grid">
+          <label>Installation required?<select name="contact[Installation]"><option>No — supply only</option><option>Yes — please quote installation</option></select></label>
+          <label>Delivery or pickup?<select name="contact[Fulfilment]"><option>Delivery to project</option><option>I'll pick up</option></select></label>
+          <label>Preferred project date<input type="date" name="contact[Preferred date]"></label>
+        </div>
+        <label class="nl-span">Additional project details<textarea name="contact[body]" rows="4" placeholder="Subfloor type, access restrictions, timelines, budget…"></textarea></label>
+        <p class="nl-hint">Photos, plans or drawings? Email them to <a href="mailto:{{ shop.email }}">{{ shop.email }}</a> with your name — we'll attach them to your request.</p>
+      </fieldset>
+      <p class="nl-hint">By submitting you agree to be contacted about this request. See our <a href="{{ shop.privacy_policy.url }}">privacy policy</a>.</p>
+      <button type="submit" class="button">Submit quote request</button>
+    {%- endif -%}
+  {%- endform -%}
+</div>
+
+<style>
+  .nl-form-section { max-width: 52rem; padding-block: 3rem; }
+  .nl-form fieldset { border: 0; padding: 0; margin: 0 0 2rem; }
+  .nl-form legend { font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; }
+  .nl-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  @media (min-width: 750px) { .nl-grid { grid-template-columns: 1fr 1fr; } .nl-span { grid-column: 1 / -1; } }
+  .nl-form label { display: grid; gap: 0.35rem; font-size: 0.9rem; font-weight: 500; }
+  .nl-form input, .nl-form select, .nl-form textarea { width: 100%; padding: 0.7rem 0.8rem; font: inherit; }
+  .nl-hint { font-size: 0.875rem; opacity: 0.8; }
+  .nl-success, .nl-error { padding: 1rem; border-radius: 6px; border: 1px solid currentColor; }
+</style>
+<script>
+  (async () => {
+    const box = document.querySelector('#nl-quote-form [data-products]');
+    if (!box || box.value) return;
+    const params = new URLSearchParams(location.search);
+    const root = {{ routes.root_url | json }}.replace(/\/$/, '');
+    try {
+      if (params.get('product')) {
+        const p = await (await fetch(`${root}/products/${encodeURIComponent(params.get('product'))}.js`)).json();
+        box.value = `${p.title}${p.variants?.[0]?.sku ? ` (SKU ${p.variants[0].sku})` : ''} — quantity: ${params.get('qty') || ''}`;
+      } else if (params.get('from') === 'cart') {
+        const cart = await (await fetch(`${root}/cart.js`)).json();
+        box.value = cart.items.map((i) => `${i.quantity} × ${i.product_title}${i.variant_title ? ` (${i.variant_title})` : ''}${i.sku ? ` — SKU ${i.sku}` : ''}`).join('\n');
+      }
+    } catch (e) { /* leave the field for the customer to fill in */ }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Quote request form",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Request a free quote" },
+    { "type": "richtext", "id": "intro", "label": "Intro", "default": "<p>Tell us about your project — no account needed. We'll reply with itemised pricing, usually within one business day.</p>" }
+  ],
+  "presets": [{ "name": "Quote request form" }]
+}
+{% endschema %}

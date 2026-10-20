@@ -1,0 +1,88 @@
+Handle,Product,Variant,Variant SKU,Retail price,Contractor fixed price
+harbour-oak-rigid-core-spc-plank,Harbour Oak Rigid Core SPC Plank,Default Title,VNL-1010,82.49,64.99
+coastline-waterproof-spc-plank,Coastline Waterproof SPC Plank,Driftwood Grey,VNL-1020-DG,89.99,76.49
+coastline-waterproof-spc-plank,Coastline Waterproof SPC Plank,Sandbar Beige,VNL-1020-SB,89.99,76.49
+coastline-waterproof-spc-plank,Coastline Waterproof SPC Plank,Smoked Walnut,VNL-1020-SW,89.99,76.49
+summit-hickory-wide-plank-spc,Summit Hickory Wide Plank SPC,Default Title,VNL-1030,104.99,89.99
+urban-concrete-spc-vinyl-tile,Urban Concrete SPC Vinyl Tile,Default Title,VNL-1040,74.99,57.49
+maple-mist-luxury-vinyl-plank,Maple Mist Luxury Vinyl Plank,Default Title,VNL-1050,54.99,46.99
+blackstone-herringbone-spc,Blackstone Herringbone SPC,Default Title,VNL-1060,79.99,69.99
+acoustic-ixpe-underlayment-roll,Acoustic IXPE Underlayment Roll — 100 sq. ft.,Default Title,VNL-1080,39.99,33.99
+colour-matched-t-moulding,"Colour-Matched T-Moulding — 94""",Harbour Oak,VNL-1090-HARBOUROAK,34.99,28.99
+colour-matched-t-moulding,"Colour-Matched T-Moulding — 94""",Driftwood Grey,VNL-1090-DRIFTWOODGREY,34.99,28.99
+colour-matched-t-moulding,"Colour-Matched T-Moulding — 94""",Smoked Walnut,VNL-1090-SMOKEDWALNUT,34.99,28.99
+primed-quarter-round-moulding,Primed Quarter Round Moulding — 8 ft,Default Title,VNL-1100,8.49,6.49
+floating-floor-installation-kit,Floating Floor Installation Kit,Default Title,VNL-1110,24.99,18.99
+flush-stair-nosing-for-spc,"Flush Stair Nosing for SPC — 94""",Harbour Oak,STR-1010-HARBOUROAK,49.99,42.49
+flush-stair-nosing-for-spc,"Flush Stair Nosing for SPC — 94""",Driftwood Grey,STR-1010-DRIFTWOODGREY,49.99,42.49
+flush-stair-nosing-for-spc,"Flush Stair Nosing for SPC — 94""",Smoked Walnut,STR-1010-SMOKEDWALNUT,49.99,42.49
+vinyl-stair-tread-cover-with-integrated-nosing,Vinyl Stair Tread Cover with Integrated Nosing,Default Title,STR-1020,64.99,54.99
+solid-red-oak-stair-tread,Solid Red Oak Stair Tread — Unfinished,"36""",STR-1030-36,57.99,47.99
+solid-red-oak-stair-tread,Solid Red Oak Stair Tread — Unfinished,"42""",STR-1030-42,63.99,53.99
+solid-red-oak-stair-tread,Solid Red Oak Stair Tread — Unfinished,"48""",STR-1030-48,69.99,59.99
+primed-pine-stair-riser,"Primed Pine Stair Riser — 48""",Default Title,STR-1040,18.99,15.49
+shaker-1-panel-interior-door-slab,Shaker 1-Panel Interior Door Slab,"24""",DOR-1010-24,159.00,129.00
+shaker-1-panel-interior-door-slab,Shaker 1-Panel Interior Door Slab,"28""",DOR-1010-28,169.00,139.00
+shaker-1-panel-interior-door-slab,Shaker 1-Panel Interior Door Slab,"30""",DOR-1010-30,179.00,149.00
+shaker-1-panel-interior-door-slab,Shaker 1-Panel Interior Door Slab,"32""",DOR-1010-32,189.00,159.00
+shaker-1-panel-interior-door-slab,Shaker 1-Panel Interior Door Slab,"36""",DOR-1010-36,204.00,174.00
+shaker-2-panel-pre-hung-interior-door,Shaker 2-Panel Pre-Hung Interior Door,"Left hand / 28""",DOR-1020-LEFT-28,319.00,259.00
+shaker-2-panel-pre-hung-interior-door,Shaker 2-Panel Pre-Hung Interior Door,"Left hand / 30""",DOR-1020-LEFT-30,329.00,269.00
+shaker-2-panel-pre-hung-interior-door,Shaker 2-Panel Pre-Hung Interior Door,"Left hand / 32""",DOR-1020-LEFT-32,339.00,279.00
+shaker-2-panel-pre-hung-interior-door,Shaker 2-Panel Pre-Hung Interior Door,"Right hand / 28""",DOR-1020-RIGHT-28,319.00,259.00
+shaker-2-panel-pre-hung-interior-door,Shaker 2-Panel Pre-Hung Interior Door,"Right hand / 30""",DOR-1020-RIGHT-30,329.00,269.00
+shaker-2-panel-pre-hung-interior-door,Shaker 2-Panel Pre-Hung Interior Door,"Right hand / 32""",DOR-1020-RIGHT-32,339.00,279.00
+modern-barn-door-kit-with-soft-close-track,"Modern Barn Door Kit with Soft-Close Track — 36""",Default Title,DOR-1030,549.00,469.00
+mirrored-bifold-closet-door,"Mirrored Bifold Closet Door — 48""",Default Title,DOR-1040,289.00,245.00
+frosted-glass-french-double-door,Frosted Glass French Double Door — Pre-Hung,Default Title,DOR-1050,1149.00,979.00
+solid-core-sound-dampening-door-slab,Solid Core Sound-Dampening Door Slab,Default Title,DOR-1060,459.00,389.00
+contour-lever-privacy-set,Contour Lever Privacy Set — Bed & Bath,Matte Black,LCK-1010-MATTEBLACK,34.99,27.99
+contour-lever-privacy-set,Contour Lever Privacy Set — Bed & Bath,Satin Nickel,LCK-1010-SATINNICKEL,34.99,27.99
+contour-lever-privacy-set,Contour Lever Privacy Set — Bed & Bath,Brushed Brass,LCK-1010-BRUSHEDBRASS,39.99,32.99
+contour-lever-passage-set,Contour Lever Passage Set — Hall & Closet,Matte Black,LCK-1020-MATTEBLACK,29.99,23.99
+contour-lever-passage-set,Contour Lever Passage Set — Hall & Closet,Satin Nickel,LCK-1020-SATINNICKEL,29.99,23.99
+contour-lever-passage-set,Contour Lever Passage Set — Hall & Closet,Brushed Brass,LCK-1020-BRUSHEDBRASS,34.99,28.99
+wi-fi-keypad-smart-deadbolt,Wi-Fi Keypad Smart Deadbolt,Default Title,LCK-1030,229.00,184.00
+single-cylinder-deadbolt,Single-Cylinder Deadbolt — Satin Nickel,Default Title,LCK-1040,39.99,32.99
+entry-handleset-with-deadbolt,Entry Handleset with Deadbolt — Matte Black,Default Title,LCK-1050,179.00,149.00
+barn-door-pull-flush-handle-set,Barn Door Pull & Flush Handle Set,Default Title,LCK-1060,44.99,37.99
+60in-x-32in-single-threshold-acrylic-shower-base,"60"" x 32"" Single-Threshold Acrylic Shower Base",Left drain,SHB-1010-LEFT,449.00,369.00
+60in-x-32in-single-threshold-acrylic-shower-base,"60"" x 32"" Single-Threshold Acrylic Shower Base",Centre drain,SHB-1010-CENTER,449.00,369.00
+60in-x-32in-single-threshold-acrylic-shower-base,"60"" x 32"" Single-Threshold Acrylic Shower Base",Right drain,SHB-1010-RIGHT,449.00,369.00
+48in-x-36in-centre-drain-shower-base,"48"" x 36"" Centre Drain Shower Base",Default Title,SHB-1020,389.00,329.00
+36in-neo-angle-corner-shower-base,"36"" Neo-Angle Corner Shower Base",Default Title,SHB-1030,359.00,299.00
+60in-x-36in-low-profile-linear-drain-base,"60"" x 36"" Low-Profile Linear Drain Base",Default Title,SHB-1040,1099.00,929.00
+60in-frameless-sliding-shower-door,"60"" Frameless Sliding Shower Door — 8 mm Clear Glass",Matte Black,SHD-1010-MATTEBLACK,899.00,719.00
+60in-frameless-sliding-shower-door,"60"" Frameless Sliding Shower Door — 8 mm Clear Glass",Brushed Nickel,SHD-1010-BRUSHEDNICKEL,899.00,719.00
+60in-frameless-sliding-shower-door,"60"" Frameless Sliding Shower Door — 8 mm Clear Glass",Polished Chrome,SHD-1010-CHROME,899.00,719.00
+36in-frameless-pivot-shower-door,"36"" Frameless Pivot Shower Door — Chrome",Default Title,SHD-1020,549.00,469.00
+60in-semi-frameless-bypass-tub-door,"60"" Semi-Frameless Bypass Tub Door",Default Title,SHD-1030,429.00,369.00
+10in-rainfall-shower-system-with-handheld,"10"" Rainfall Shower System with Handheld — Matte Black",Default Title,SHA-1010,389.00,305.00
+24in-linear-shower-drain,"24"" Linear Shower Drain — Brushed Stainless",Default Title,SHA-1020,149.00,124.00
+recessed-shower-niche,"Recessed Shower Niche — 12"" x 24""",Default Title,SHA-1030,119.00,99.00
+stainless-steel-grab-bar,"Stainless Steel Grab Bar — 24""",Default Title,SHA-1040,49.99,41.99
+fold-down-teak-shower-bench,Fold-Down Teak Shower Bench,Default Title,SHA-1050,159.00,135.00
+soft-close-elongated-toilet-seat,Soft-Close Elongated Toilet Seat — Quick Release,Default Title,TST-1010,59.99,48.99
+soft-close-round-toilet-seat,Soft-Close Round Toilet Seat,Default Title,TST-1020,49.99,40.99
+heated-bidet-seat,Heated Bidet Seat — Elongated,Default Title,TST-1030,499.00,429.00
+30in-shaker-single-vanity-with-quartz-top,"30"" Shaker Single Vanity with Quartz Top",Harbour Navy,VAN-1010-NAVY,849.00,699.00
+30in-shaker-single-vanity-with-quartz-top,"30"" Shaker Single Vanity with Quartz Top",Classic White,VAN-1010-WHITE,849.00,699.00
+30in-shaker-single-vanity-with-quartz-top,"30"" Shaker Single Vanity with Quartz Top",Sage Green,VAN-1010-SAGE,849.00,699.00
+36in-floating-oak-vanity-with-vessel-top,"36"" Floating Oak Vanity with Vessel Top",Default Title,VAN-1020,1049.00,899.00
+60in-double-sink-vanity,"60"" Double Sink Vanity — White with Marble-Look Top",Default Title,VAN-1030,1799.00,1529.00
+24in-compact-wall-mount-vanity,"24"" Compact Wall-Mount Vanity",Default Title,VAN-1040,499.00,419.00
+30in-x-36in-led-backlit-mirror-with-defogger,"30"" x 36"" LED Backlit Mirror with Defogger",Default Title,VAN-1050,229.00,179.00
+pex-a-pipe-half-inch-100-ft,"1/2"" PEX-A Pipe — 100 ft Coil",Red (hot),PLB-1010-RED,64.99,52.99
+pex-a-pipe-half-inch-100-ft,"1/2"" PEX-A Pipe — 100 ft Coil",Blue (cold),PLB-1010-BLUE,64.99,52.99
+pressure-balance-shower-valve-with-trim-kit,Pressure-Balance Shower Valve with Trim Kit,Default Title,PLB-1020,189.00,159.00
+braided-faucet-supply-line,"Braided Faucet Supply Line — 16"" (2-Pack)",Default Title,PLB-1030,17.99,13.99
+push-fit-quarter-turn-shut-off-valve,"Push-Fit Quarter-Turn Shut-Off Valve — 1/2""",Default Title,PLB-1040,14.99,11.49
+pvc-p-trap-kit-1-5-inch,"1-1/2"" PVC P-Trap Kit",Default Title,PLB-1050,12.99,9.99
+fluted-wpc-wall-panel,"Fluted WPC Wall Panel — 9.45"" x 9.5 ft",Natural Oak,WPC-1010-NATURALOAK,64.99,49.99
+fluted-wpc-wall-panel,"Fluted WPC Wall Panel — 9.45"" x 9.5 ft",Charcoal,WPC-1010-CHARCOAL,64.99,49.99
+fluted-wpc-wall-panel,"Fluted WPC Wall Panel — 9.45"" x 9.5 ft",Walnut,WPC-1010-WALNUT,64.99,49.99
+fluted-wpc-wall-panel,"Fluted WPC Wall Panel — 9.45"" x 9.5 ft",Ivory,WPC-1010-IVORY,64.99,49.99
+flat-wpc-wall-panel,Flat WPC Wall Panel — Stone Grey,Default Title,WPC-1020,89.99,76.99
+walnut-slat-acoustic-panel,Walnut Slat Acoustic Panel — Felt Backed,Default Title,WPC-1030,149.00,127.00
+wpc-panel-end-cap-trim,WPC Panel End Cap Trim — 9.5 ft,Default Title,WPC-1040,19.99,15.99
+panel-moulding-construction-adhesive,Panel & Moulding Construction Adhesive — 10 oz,Default Title,WPC-1050,11.99,9.49

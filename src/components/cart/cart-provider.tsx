@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { useMemo, useSyncExternalStore, type ReactNode } from "react";
 import type { CartLine } from "@/lib/types";
 import { cartLineKey } from "@/lib/cart";
 
@@ -8,23 +8,31 @@ import { cartLineKey } from "@/lib/cart";
  * Cart state lives in the browser (localStorage) so guests can shop without an
  * account. Prices are NEVER stored here — every view re-prices the lines on the
  * server for the current viewer (see app/actions/cart.ts).
+ *
+ * The cart is a small external store read with useSyncExternalStore rather than
+ * React state held in a context provider. Loading the saved cart after the page
+ * arrives therefore re-renders only the components that read it (header count,
+ * drawer, cart page…). A context update above a still-streaming part of the page
+ * would make React discard that server HTML and re-render it on the client.
  */
 const STORAGE_KEY = "nl_cart_v1";
 
-interface CartContextValue {
+interface CartState {
   lines: CartLine[];
+  /** False during server render / hydration, true once the saved cart has been read. */
   hydrated: boolean;
+  drawerOpen: boolean;
+}
+
+interface CartContextValue extends CartState {
   count: number;
   addItem: (productId: string, quantity: number, options?: Record<string, string>) => void;
   setQuantity: (key: string, quantity: number) => void;
   removeItem: (key: string) => void;
   clear: () => void;
-  drawerOpen: boolean;
   openDrawer: () => void;
   closeDrawer: () => void;
 }
-
-const CartContext = createContext<CartContextValue | null>(null);
 
 function readStorage(): CartLine[] {
   try {
@@ -36,73 +44,83 @@ function readStorage(): CartLine[] {
   }
 }
 
-export function CartProvider({ children }: { children: ReactNode }) {
-  const [lines, setLines] = useState<CartLine[]>([]);
-  const [hydrated, setHydrated] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false);
+function writeStorage(lines: CartLine[]) {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(lines));
+  } catch {
+    // storage full or disabled — cart still works for this page view
+  }
+}
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- hydrate from localStorage after mount
-    setLines(readStorage());
-    setHydrated(true);
-    const onStorage = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEY) setLines(readStorage());
-    };
-    window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
-  }, []);
+/* ------------------------------ store ------------------------------ */
 
-  useEffect(() => {
-    if (!hydrated) return;
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(lines));
-    } catch {
-      // storage full or disabled — cart still works for this page view
-    }
-  }, [lines, hydrated]);
+const SERVER_STATE: CartState = { lines: [], hydrated: false, drawerOpen: false };
+let state: CartState | null = null;
+const listeners = new Set<() => void>();
 
-  const addItem = useCallback((productId: string, quantity: number, options?: Record<string, string>) => {
-    setLines((current) => {
+function getState(): CartState {
+  state ??= { lines: readStorage(), hydrated: true, drawerOpen: false };
+  return state;
+}
+
+const getServerState = () => SERVER_STATE;
+
+function update(fn: (s: CartState) => CartState) {
+  const prev = getState();
+  const next = fn(prev);
+  if (next === prev) return;
+  state = next;
+  if (next.lines !== prev.lines) writeStorage(next.lines);
+  listeners.forEach((l) => l());
+}
+
+function onStorage(e: StorageEvent) {
+  if (e.key === STORAGE_KEY) update((s) => ({ ...s, lines: readStorage() }));
+}
+
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+  if (listeners.size === 1) window.addEventListener("storage", onStorage);
+  return () => {
+    listeners.delete(listener);
+    if (listeners.size === 0) window.removeEventListener("storage", onStorage);
+  };
+}
+
+const actions = {
+  addItem(productId: string, quantity: number, options?: Record<string, string>) {
+    update((s) => {
       const key = cartLineKey({ productId, options });
-      const existing = current.find((l) => cartLineKey(l) === key);
-      if (existing) {
-        return current.map((l) => (cartLineKey(l) === key ? { ...l, quantity: Math.min(999, l.quantity + quantity) } : l));
-      }
-      return [...current, { productId, quantity, options: options && Object.keys(options).length ? options : undefined }];
+      const existing = s.lines.find((l) => cartLineKey(l) === key);
+      const lines = existing
+        ? s.lines.map((l) => (cartLineKey(l) === key ? { ...l, quantity: Math.min(999, l.quantity + quantity) } : l))
+        : [...s.lines, { productId, quantity, options: options && Object.keys(options).length ? options : undefined }];
+      return { ...s, lines };
     });
-  }, []);
+  },
+  setQuantity(key: string, quantity: number) {
+    update((s) => ({ ...s, lines: s.lines.map((l) => (cartLineKey(l) === key ? { ...l, quantity: Math.max(1, Math.min(999, quantity)) } : l)) }));
+  },
+  removeItem(key: string) {
+    update((s) => ({ ...s, lines: s.lines.filter((l) => cartLineKey(l) !== key) }));
+  },
+  clear() {
+    update((s) => ({ ...s, lines: [] }));
+  },
+  openDrawer() {
+    update((s) => (s.drawerOpen ? s : { ...s, drawerOpen: true }));
+  },
+  closeDrawer() {
+    update((s) => (s.drawerOpen ? { ...s, drawerOpen: false } : s));
+  },
+};
 
-  const setQuantity = useCallback((key: string, quantity: number) => {
-    setLines((current) => current.map((l) => (cartLineKey(l) === key ? { ...l, quantity: Math.max(1, Math.min(999, quantity)) } : l)));
-  }, []);
-
-  const removeItem = useCallback((key: string) => {
-    setLines((current) => current.filter((l) => cartLineKey(l) !== key));
-  }, []);
-
-  const clear = useCallback(() => setLines([]), []);
-
-  const value = useMemo<CartContextValue>(
-    () => ({
-      lines,
-      hydrated,
-      count: lines.reduce((n, l) => n + l.quantity, 0),
-      addItem,
-      setQuantity,
-      removeItem,
-      clear,
-      drawerOpen,
-      openDrawer: () => setDrawerOpen(true),
-      closeDrawer: () => setDrawerOpen(false),
-    }),
-    [lines, hydrated, addItem, setQuantity, removeItem, clear, drawerOpen],
-  );
-
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+/** Kept so layouts don't change; the cart no longer needs a context provider. */
+export function CartProvider({ children }: { children: ReactNode }) {
+  return <>{children}</>;
 }
 
 export function useCart(): CartContextValue {
-  const ctx = useContext(CartContext);
-  if (!ctx) throw new Error("useCart must be used inside <CartProvider>");
-  return ctx;
+  const s = useSyncExternalStore(subscribe, getState, getServerState);
+  return useMemo(() => ({ ...s, count: s.lines.reduce((n, l) => n + l.quantity, 0), ...actions }), [s]);
 }

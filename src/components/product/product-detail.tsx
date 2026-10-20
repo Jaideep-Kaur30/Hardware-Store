@@ -152,7 +152,7 @@ export function ProductDetail({
                       o.available === false && "cursor-not-allowed opacity-40",
                     )}
                   >
-                    <input type="radio" name={group.name} value={o.value} checked={selected} disabled={o.available === false} onChange={() => setOptions((prev) => ({ ...prev, [group.name]: o.value }))} className="sr-only" />
+                    <input type="radio" name={group.name} value={o.value} defaultChecked={selected} disabled={o.available === false} onChange={() => setOptions((prev) => ({ ...prev, [group.name]: o.value }))} className="sr-only" />
                     {o.swatch ? <span className="h-4 w-4 rounded-full ring-1 ring-line" style={{ background: o.swatch }} aria-hidden /> : null}
                     {o.label}
                     {o.priceAdjustment && price.mode === "price" ? <span className={cn("text-xs", selected ? "text-white/70" : "text-body")}>{o.priceAdjustment > 0 ? "+" : "−"}${Math.abs(o.priceAdjustment)}</span> : null}

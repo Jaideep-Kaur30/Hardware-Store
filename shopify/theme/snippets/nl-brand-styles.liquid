@@ -1,0 +1,24 @@
+{%- comment -%}
+  Brand typography: Satoshi for body and headings (as on the reference site).
+  1. Download Satoshi from fontshare.com (ITF Free Font License — confirm terms), then upload
+     Satoshi-Regular.woff2, Satoshi-Medium.woff2 and Satoshi-Bold.woff2 under
+     Online Store → Themes → Edit code → Assets.
+  2. In layout/theme.liquid, just before </head>, add:  {% render 'nl-brand-styles' %}
+  Colours are set in the theme editor (Theme settings → Colors), not here — see SHOPIFY_SETUP.md.
+  Variable names cover Dawn and Horizon; check headings/body switch to Satoshi after saving.
+{%- endcomment -%}
+<style>
+  @font-face { font-family: "Satoshi"; src: url({{ 'Satoshi-Regular.woff2' | asset_url }}) format("woff2"); font-weight: 400; font-display: swap; }
+  @font-face { font-family: "Satoshi"; src: url({{ 'Satoshi-Medium.woff2' | asset_url }}) format("woff2"); font-weight: 500; font-display: swap; }
+  @font-face { font-family: "Satoshi"; src: url({{ 'Satoshi-Bold.woff2' | asset_url }}) format("woff2"); font-weight: 600 700; font-display: swap; }
+  :root {
+    --font-body-family: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+    --font-heading-family: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+    --font-heading-weight: 600;
+    --font-body--family: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+    --font-heading--family: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+    --font-subheading--family: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+    --font-accent--family: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+  }
+  body, h1, h2, h3, h4, h5, h6, .h0, .h1, .h2, .h3, .h4, .h5, button, input, select, textarea { font-family: "Satoshi", ui-sans-serif, system-ui, sans-serif; }
+</style>

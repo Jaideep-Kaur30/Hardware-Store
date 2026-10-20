@@ -1,9 +1,20 @@
-import { describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { createSeedDatabase } from "@/data/seed";
 import { toProductView } from "@/lib/catalog-view";
 import { filterProducts, parseFilters, searchScore } from "@/lib/catalog-filter";
 
-const db = createSeedDatabase(new Date("2026-09-23T12:00:00Z"));
+// Freeze the clock at the seed date: sale end dates are relative to it, and
+// pricing checks "is this sale still running?" against the current time.
+const SEED_DATE = new Date("2026-09-23T12:00:00Z");
+beforeAll(() => {
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(SEED_DATE);
+});
+afterAll(() => {
+  vi.useRealTimers();
+});
+
+const db = createSeedDatabase(SEED_DATE);
 
 describe("product view (data sent to the browser)", () => {
   it("never includes the raw pricing object or contractor price for non-approved viewers", () => {

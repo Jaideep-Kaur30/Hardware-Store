@@ -1,5 +1,7 @@
 # Phase 2 Plan — from Stage 1 prototype to production
 
+> **SUPERSEDED (2026-10-20):** the client chose **Shopify (Basic, billed yearly)** for the live store. See [SHOPIFY_SETUP.md](./SHOPIFY_SETUP.md). This document is kept for reference only.
+
 **Status:** DRAFT. Do not start this plan until the client has approved the Stage 1 prototype and all revision requests are closed.
 **Written:** 2026-09-28, from the codebase at the end of the Stage 1 audit (branch `claude/intelligent-edison-536z5s`).
 **Companion documents:** [HANDOFF.md](./HANDOFF.md) (how the project works today), [PRODUCTION_TODO.md](./PRODUCTION_TODO.md) (launch checklist), [CLIENT_INFORMATION_REQUIRED.md](./CLIENT_INFORMATION_REQUIRED.md) (what we need from the client).

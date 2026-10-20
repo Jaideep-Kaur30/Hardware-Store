@@ -9,8 +9,8 @@ export { expect } from "@playwright/test";
  * failures; pages fall back to the self-hosted Inter font.
  */
 export const test = base.extend({
-  context: async ({ context }, use) => {
+  context: async ({ context }, provide) => {
     await context.route(/^https:\/\/(api|cdn)\.fontshare\.com\//, (route) => route.fulfill({ status: 200, contentType: "text/css", body: "" }));
-    await use(context);
+    await provide(context);
   },
 });

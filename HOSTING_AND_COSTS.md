@@ -1,5 +1,7 @@
 # Hosting, infrastructure and running costs: final recommendation (for approval)
 
+> **SUPERSEDED (2026-10-20):** the client chose **Shopify (Basic, billed yearly)** for the live store. See [SHOPIFY_SETUP.md](./SHOPIFY_SETUP.md). This document is kept for reference only.
+
 **Status:** FINAL RECOMMENDATION. Awaiting approval. **Nothing has been purchased, subscribed to, deployed or migrated.** No server work starts until this document is approved in writing.
 **Revised:** 2026-10-04. Prices are from public price lists on that date and **exclude tax** (Canadian providers add GST/HST; 13% in Ontario). Check each price at checkout.
 **Approved direction (tentative):** the existing custom website · a Canadian OVHcloud VPS · PostgreSQL on the VPS · Stripe · Amazon SES or the client's existing business email · Cloudflare for DNS and security · Let's Encrypt SSL · annual domain renewal · no Shopify, Wix or Squarespace · no mandatory monthly SaaS platform.

@@ -1,0 +1,62 @@
+{%- comment -%}
+  Contractor (trade) account application. Uses Shopify's built-in contact form — free on every plan.
+  Approval workflow (manual, no app): staff review the emailed application, then in
+  Customers → Companies create a B2B company for the contractor, add them as the contact and assign
+  the "Contractors" B2B market (which carries the contractor price catalog). Shopify emails the
+  contractor an invitation to their B2B account. Rejected applicants simply receive a reply email.
+  Install like nl-quote-request.liquid and create page "Contractors" (handle: contractors).
+{%- endcomment -%}
+<div class="page-width nl-form-section">
+  <h1 class="h1">{{ section.settings.heading }}</h1>
+  {%- if section.settings.intro != blank -%}<div class="rte nl-intro">{{ section.settings.intro }}</div>{%- endif -%}
+
+  {%- form 'contact', id: 'nl-contractor-form', class: 'nl-form' -%}
+    {%- if form.posted_successfully? -%}
+      <p class="nl-success" role="status" tabindex="-1">Thanks — your application is awaiting approval. We'll email you once it has been reviewed.</p>
+    {%- else -%}
+      {%- if form.errors -%}<div class="nl-error" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
+      <input type="hidden" name="contact[Form]" value="Contractor application">
+      <div class="nl-grid">
+        <label>Contact name *<input name="contact[Name]" required autocomplete="name"></label>
+        <label>Email *<input type="email" name="contact[email]" required autocomplete="email"></label>
+        <label>Phone *<input type="tel" name="contact[Phone]" required autocomplete="tel"></label>
+        <label>Company / business name *<input name="contact[Company]" required autocomplete="organization"></label>
+        <label>Business type *
+          <select name="contact[Business type]" required>
+            <option>General contractor</option><option>Flooring installer</option><option>Renovation / remodelling</option><option>Plumber</option>
+            <option>Carpenter / finish carpenter</option><option>Property manager</option><option>Builder / developer</option><option>Designer / architect</option><option>Other trade</option>
+          </select>
+        </label>
+        <label>HST / business number<input name="contact[HST number]"></label>
+        <label class="nl-span">Business address *<input name="contact[Business address]" required autocomplete="street-address"></label>
+        <label>Trade licence / registration #<input name="contact[Licence]"></label>
+        <label>Years in business<input type="number" min="0" name="contact[Years in business]"></label>
+        <label>Estimated monthly purchases<select name="contact[Monthly purchases]"><option>Under $2,500</option><option>$2,500–$10,000</option><option>$10,000–$25,000</option><option>Over $25,000</option></select></label>
+        <label>Website or social page<input type="url" name="contact[Website]" placeholder="https://"></label>
+        <label class="nl-span">Tell us about your work<textarea name="contact[body]" rows="4"></textarea></label>
+      </div>
+      <label class="nl-check"><input type="checkbox" required> I confirm these details are accurate and agree to the trade account terms.</label>
+      <button type="submit" class="button">Submit application</button>
+    {%- endif -%}
+  {%- endform -%}
+</div>
+<style>
+  .nl-form-section { max-width: 52rem; padding-block: 3rem; }
+  .nl-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+  @media (min-width: 750px) { .nl-grid { grid-template-columns: 1fr 1fr; } .nl-span { grid-column: 1 / -1; } }
+  .nl-form label { display: grid; gap: 0.35rem; font-size: 0.9rem; font-weight: 500; }
+  .nl-form .nl-check { display: flex; gap: 0.5rem; align-items: start; margin-bottom: 1.25rem; }
+  .nl-form input:not([type="checkbox"]), .nl-form select, .nl-form textarea { width: 100%; padding: 0.7rem 0.8rem; font: inherit; }
+  .nl-success, .nl-error { padding: 1rem; border-radius: 6px; border: 1px solid currentColor; }
+</style>
+
+{% schema %}
+{
+  "name": "Contractor application",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Apply for a contractor account" },
+    { "type": "richtext", "id": "intro", "label": "Intro", "default": "<p>Approved trade accounts see contractor pricing automatically when signed in. Applications are usually reviewed within one business day.</p>" }
+  ],
+  "presets": [{ "name": "Contractor application" }]
+}
+{% endschema %}

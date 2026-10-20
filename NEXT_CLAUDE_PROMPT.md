@@ -1,5 +1,7 @@
 # Prompt for the next Claude session (Phase 2 kick-off)
 
+> **SUPERSEDED (2026-10-20):** the client chose **Shopify (Basic, billed yearly)** for the live store. See [SHOPIFY_SETUP.md](./SHOPIFY_SETUP.md). This document is kept for reference only.
+
 > **For the human:** only use this **after the client has approved Stage 1**. Before pasting, fill in the two `<<…>>` placeholders: the approval date, and the revisions (or "none"). Copy everything between the lines below into a new Claude Code session on this repository.
 >
 > **Note:** this file was written at the end of Stage 1 (2026-09-28). The instructions inside it were **not** carried out then.

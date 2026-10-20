@@ -238,7 +238,8 @@ See **[PRODUCTION_TODO.md](./PRODUCTION_TODO.md)** for the production checklist.
 | [PHASE_2_PLAN.md](./PHASE_2_PLAN.md) | Developers | Current architecture, what is production-ready vs demo-only, the recommended Phase 2 order, migration risks |
 | [PRODUCTION_TODO.md](./PRODUCTION_TODO.md) | Everyone | Launch checklist. Each item is marked: can do now, needs client info, or needs third-party credentials |
 | [CLIENT_INFORMATION_REQUIRED.md](./CLIENT_INFORMATION_REQUIRED.md) | The client | Everything the store owner must supply, split into "required before production" and "optional / later" |
-| [HOSTING_AND_COSTS.md](./HOSTING_AND_COSTS.md) | The client and developers | Recommended production stack (custom site, annually prepaid server, no monthly platform subscription) with estimated yearly, usage-based and per-transaction costs, **for approval** |
+| [SHOPIFY_SETUP.md](./SHOPIFY_SETUP.md) | Developer, Aditya, the client | **Current plan:** step-by-step Shopify setup (Basic, yearly), costs, ownership and collaborator access, plus the ready-made import files and theme add-ons in `shopify/` |
+| [HOSTING_AND_COSTS.md](./HOSTING_AND_COSTS.md) (superseded) | The client and developers | Recommended production stack (custom site, annually prepaid server, no monthly platform subscription) with estimated yearly, usage-based and per-transaction costs, **for approval** |
 | [NEXT_CLAUDE_PROMPT.md](./NEXT_CLAUDE_PROMPT.md) | Future AI session | Ready-to-paste prompt for starting Phase 2 **after** client approval |
 | `docs/Website-Features-Guide.pdf` / `.docx` | The client | Illustrated tour of every feature with links |
 
@@ -247,6 +248,20 @@ See **[PRODUCTION_TODO.md](./PRODUCTION_TODO.md)** for the production checklist.
 ## Change log
 
 Newest first. Every code change pushed to GitHub gets an entry here.
+
+### 2026-10-20 — Stability fixes found while preparing the Shopify files
+- Fixed an occasional glitch where, while a page was still loading, the browser briefly drew the page twice. Occasionally this caused an error when choosing a product size or finish very quickly. The cart now loads in a way that doesn't redraw the whole page, and size/finish buttons were made more robust.
+- Fixed date-sensitive automated tests that started failing as real time passed (demo sales "expired"). The tests now use a fixed date.
+- Fixed a code-quality warning in the test setup.
+- All 51 unit tests and 44 end-to-end tests pass (three full runs in a row).
+
+### 2026-10-20 — Shopify chosen for the live store; setup files prepared
+- The client chose **Shopify** (Basic plan, paid yearly, ≈ C$444 a year plus domain and card fees) for the live store. This replaces the self-hosted plan.
+- Added **SHOPIFY_SETUP.md**, a step-by-step guide covering who owns the store, collaborator access for the developer and Aditya, payments (including Interac e-Transfer), taxes, products, collections, pickup and delivery zones, contractor pricing with Shopify's free built-in B2B tools, quote and contractor forms, theme colours and fonts, domain and launch checks.
+- Added ready-made files in `shopify/`: a **product import file** (59 products, 90 variants), the **contractor price list**, the **delivery zones**, and theme add-ons for the square-footage calculator, "Request a quote" products, the quote form and the contractor application form. These recreate the prototype's key features **without monthly apps**.
+- Added `scripts/export-shopify.ts` to regenerate the import files.
+- **Nothing has been set up on Shopify yet.** The store must be created in, or transferred to, the business's own Shopify account.
+- No changes to the prototype website.
 
 ### 2026-10-04 — Final hosting recommendation (for approval)
 - Finalised **HOSTING_AND_COSTS.md**. The chosen server is OVHcloud's smallest suitable Canadian plan (VPS-1: 2 cores, 4 GB memory, 40 GB storage), with a check that it is enough for the shop, database, accounts, admin, orders and quotes.

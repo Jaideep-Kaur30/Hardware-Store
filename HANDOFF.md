@@ -202,6 +202,10 @@ More than 6 oversized units (doors, vanities, shower bases…) → the delivery 
 
 **Added:** `tests/e2e/regression.spec.ts` (18 tests, including the contractor-price leak matrix) and 3 unit tests.
 
+## 13a. Platform decision: Shopify (2026-10-20)
+
+The client accepted **Shopify Basic, billed yearly** for the live store (≈ C$444/year + domain + Shopify Payments fees). The custom prototype stays as the design reference and demo. Everything prepared for the move (product import CSV, contractor B2B prices, delivery zones, theme snippets/sections and a step-by-step guide) is in [SHOPIFY_SETUP.md](./SHOPIFY_SETUP.md) and `shopify/`. The store must be owned by the business; the developer and Aditya get collaborator access. The self-hosted plan below is superseded.
+
 ## 13b. Hosting and cost constraint
 
 The client does **not** want a mandatory monthly platform or SaaS subscription. Annual billing is preferred, and usage-based or per-transaction fees are acceptable. The recommended production stack is in [HOSTING_AND_COSTS.md](./HOSTING_AND_COSTS.md): an annually prepaid Canadian VPS with Caddy, PostgreSQL, Amazon SES pay-as-you-go and Stripe, estimated at about C$100–120 a year including HST (OVHcloud VPS-1 with a 12-month commitment, plus domain and backups), plus Stripe fees of 2.9% + C$0.30 per card payment. It is **awaiting client approval**. **Post-launch server maintenance must be arranged in writing**; it is not free ongoing developer work (see section 7 of that document). Nothing has been purchased. The current Render free service is for the demo only.

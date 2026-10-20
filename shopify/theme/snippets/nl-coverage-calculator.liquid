@@ -1,0 +1,68 @@
+{%- comment -%}
+  Square-footage calculator (recreates the prototype's "How much do I need?").
+  Usage: on the product template add a "Custom Liquid" block containing
+    {% render 'nl-coverage-calculator', product: product %}
+  Needs the product metafield custom.coverage_sqft (decimal) — set by the import CSV.
+  Optional: custom.coverage_unit (single-line text, e.g. "box").
+{%- endcomment -%}
+{%- assign coverage = product.metafields.custom.coverage_sqft.value -%}
+{%- if coverage != blank and coverage > 0 -%}
+  {%- assign unit = product.metafields.custom.coverage_unit.value | default: 'box' -%}
+  <div class="nl-calc" data-coverage="{{ coverage }}" data-unit="{{ unit | escape }}">
+    <p class="nl-calc__title">How much do I need?</p>
+    <p class="nl-calc__hint">Each {{ unit | escape }} covers {{ coverage }} sq. ft.</p>
+    <div class="nl-calc__row">
+      <label>Length (ft)<input type="number" min="0" step="0.1" inputmode="decimal" data-l value="12"></label>
+      <span aria-hidden="true">×</span>
+      <label>Width (ft)<input type="number" min="0" step="0.1" inputmode="decimal" data-w value="10"></label>
+    </div>
+    <label class="nl-calc__or">Or total area (sq. ft.)<input type="number" min="0" step="1" inputmode="decimal" data-area placeholder="Optional"></label>
+    <fieldset class="nl-calc__waste">
+      <legend>Waste allowance</legend>
+      {%- for w in '0,5,10,15' | split: ',' -%}
+        <label><input type="radio" name="nl-waste-{{ product.id }}" value="{{ w }}" {% if w == '10' %}checked{% endif %}> {% if w == '0' %}None{% else %}{{ w }}%{% endif %}</label>
+      {%- endfor -%}
+    </fieldset>
+    <p class="nl-calc__result" aria-live="polite"></p>
+    <button type="button" class="button button--secondary nl-calc__apply">Use quantity</button>
+  </div>
+  <style>
+    .nl-calc { margin: 1.25rem 0; padding: 1.25rem; border: 1px solid rgb(var(--color-foreground) / 0.15); border-radius: 8px; }
+    .nl-calc__title { font-weight: 600; margin: 0; }
+    .nl-calc__hint, .nl-calc__result { margin: 0.35rem 0 0.75rem; opacity: 0.8; }
+    .nl-calc__row { display: flex; align-items: end; gap: 0.75rem; }
+    .nl-calc label { display: grid; gap: 0.25rem; font-size: 0.875rem; }
+    .nl-calc input[type="number"] { width: 100%; padding: 0.6rem; }
+    .nl-calc__or { margin-top: 0.75rem; }
+    .nl-calc__waste { display: flex; flex-wrap: wrap; gap: 0.75rem; border: 0; padding: 0; margin: 0.75rem 0 0; }
+    .nl-calc__waste label { display: inline-flex; align-items: center; gap: 0.35rem; }
+    .nl-calc__result { font-weight: 600; opacity: 1; }
+  </style>
+  <script>
+    (() => {
+      const root = document.currentScript.previousElementSibling.previousElementSibling;
+      const cov = parseFloat(root.dataset.coverage), unit = root.dataset.unit;
+      const $ = (s) => root.querySelector(s);
+      let units = 0;
+      const plural = (n) => (n === 1 ? unit : unit + (/(x|s|ch|sh)$/.test(unit) ? 'es' : 's'));
+      function calc() {
+        const typed = parseFloat($('[data-area]').value);
+        const area = typed > 0 ? typed : (parseFloat($('[data-l]').value) || 0) * (parseFloat($('[data-w]').value) || 0);
+        const waste = parseFloat(root.querySelector('input[type=radio]:checked').value) || 0;
+        const withWaste = area * (1 + waste / 100);
+        units = area > 0 ? Math.ceil(withWaste / cov - 1e-9) : 0;
+        $('.nl-calc__result').textContent = area > 0
+          ? `${area.toFixed(0)} sq. ft. + ${waste}% waste = ${withWaste.toFixed(1)} sq. ft. → ${units} ${plural(units)} (${(units * cov).toFixed(1)} sq. ft.)`
+          : 'Enter your room size.';
+        $('.nl-calc__apply').textContent = `Use ${units} ${plural(units)}`;
+        $('.nl-calc__apply').disabled = units === 0;
+      }
+      root.addEventListener('input', calc);
+      $('.nl-calc__apply').addEventListener('click', () => {
+        const qty = document.querySelector('form[action*="/cart/add"] input[name="quantity"], input[name="quantity"]');
+        if (qty) { qty.value = units; qty.dispatchEvent(new Event('change', { bubbles: true })); qty.focus(); }
+      });
+      calc();
+    })();
+  </script>
+{%- endif -%}

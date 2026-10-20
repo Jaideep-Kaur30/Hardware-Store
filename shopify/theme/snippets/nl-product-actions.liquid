@@ -1,0 +1,42 @@
+{%- comment -%}
+  "Request a quote" instead of buying, for:
+    • products tagged  quote-only        (everyone)
+    • products tagged  contractors-only  (everyone except signed-in B2B contractor customers)
+  Usage: on the product template add a "Custom Liquid" block (just above Buy buttons):
+    {% render 'nl-product-actions', product: product %}
+
+  Safety: quote-only products are imported with price 0 and stock 0 / "deny", so they can't be
+  bought even if this snippet is missing. Contractors-only products keep their retail price for
+  regular customers; contractor prices come only from the B2B catalog, never from the theme.
+
+  The CSS selectors below cover Shopify's Dawn and Horizon themes. If another theme is chosen,
+  check the buy button still hides (see SHOPIFY_SETUP.md → Theme).
+{%- endcomment -%}
+{%- liquid
+  assign quote_only = false
+  if product.tags contains 'quote-only'
+    assign quote_only = true
+  elsif product.tags contains 'contractors-only'
+    unless customer and customer.b2b?
+      assign quote_only = true
+    endunless
+  endif
+-%}
+{%- if quote_only -%}
+  <style>
+    product-form, .product-form, .product-form__buttons, .product-form__input--quantity, .shopify-payment-button,
+    [data-block-type="buy-buttons"], .buy-buttons-block, .product-details .price, .product__info-container .price,
+    .product-information .price, .product__price { display: none !important; }
+  </style>
+  <div class="nl-quote">
+    <a class="button button--full-width" href="{{ routes.root_url | remove_last: '/' }}/pages/quote?product={{ product.handle | url_encode }}">Request a quote</a>
+    <p class="nl-quote__note">
+      {%- if product.tags contains 'contractors-only' -%}
+        Trade pricing for approved contractor accounts. <a href="{{ routes.root_url | remove_last: '/' }}/pages/contractors">Apply for a trade account</a> or request a quote.
+      {%- else -%}
+        Tell us your measurements and quantities — our team will send pricing, usually within one business day.
+      {%- endif -%}
+    </p>
+  </div>
+  <style>.nl-quote { margin: 1rem 0; } .nl-quote__note { margin-top: .6rem; font-size: .875rem; opacity: .8; }</style>
+{%- endif -%}
