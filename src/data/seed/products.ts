@@ -48,6 +48,10 @@ interface ProductDef {
   specs: [string, string][];
   coverage?: { perUnit: number; unitLabel: string };
   art: [ArtKind, string, string?, number?];
+  /** Explicit SKU override. When omitted, one is auto-generated from the category code. */
+  sku?: string;
+  /** Real product photography, served from /public. Overrides the generated placeholder art images. */
+  photos?: { file: string; alt: string }[];
   variants?: VariantGroup[];
   related?: string[];
   accessories?: string[];
@@ -131,7 +135,114 @@ const finishes = {
   },
 } satisfies Record<string, VariantGroup>;
 
-const defs: ProductDef[] = [
+/**
+ * SG Vinyl Plank collection — added from supplier spec sheets (forwarded by
+ * Saumya Gelani, Oct 2026). Only size/packaging facts from the supplier are
+ * known; wear layer, core composition, installation method and pricing are
+ * unconfirmed and must be filled in before launch.
+ */
+interface SgVinylColour {
+  /** Numeric suffix of the supplier SKU, e.g. "601" for SG-601. */
+  code: string;
+  name: string;
+}
+
+interface SgVinylLine {
+  thicknessMm: number;
+  qtyPerBox: number;
+  sqftPerBox: number;
+  boxesPerSkid: number;
+  sqftPerSkid: number;
+  colours: SgVinylColour[];
+}
+
+const sgVinylLines: SgVinylLine[] = [
+  {
+    thicknessMm: 6,
+    qtyPerBox: 12,
+    sqftPerBox: 28.68,
+    boxesPerSkid: 50,
+    sqftPerSkid: 1434,
+    colours: [
+      { code: "601", name: "Alcor" },
+      { code: "602", name: "Leo" },
+      { code: "603", name: "Pegasus" },
+      { code: "604", name: "Crater" },
+      { code: "605", name: "Orion" },
+      { code: "606", name: "Gemini" },
+    ],
+  },
+  {
+    thicknessMm: 7,
+    qtyPerBox: 10,
+    sqftPerBox: 23.9,
+    boxesPerSkid: 50,
+    sqftPerSkid: 1195,
+    colours: [
+      { code: "701", name: "Corina" },
+      { code: "702", name: "Crux" },
+      { code: "703", name: "Virgo" },
+      { code: "704", name: "Aries" },
+      { code: "705", name: "Polaris" },
+      { code: "706", name: "Vega" },
+    ],
+  },
+  {
+    thicknessMm: 8,
+    qtyPerBox: 8,
+    sqftPerBox: 19.12,
+    boxesPerSkid: 50,
+    sqftPerSkid: 956,
+    colours: [
+      { code: "801", name: "Libra" },
+      { code: "802", name: "Pisces" },
+      { code: "803", name: "Darco" },
+      { code: "804", name: "Lynx" },
+      { code: "805", name: "Taurus" },
+      { code: "806", name: "Norma" },
+    ],
+  },
+];
+
+const sgVinylDefs: ProductDef[] = sgVinylLines.flatMap((line) =>
+  line.colours.map((colour): ProductDef => {
+    const sku = `SG-${colour.code}`;
+    const name = `${colour.name} ${line.thicknessMm}mm Vinyl Plank`;
+    return {
+      key: `sg-${colour.code}-${colour.name.toLowerCase()}`,
+      name,
+      category: "vinyl",
+      sub: "luxury-vinyl-plank",
+      brand: "SG Collection",
+      sku,
+      short: `${colour.name} — ${line.thicknessMm} mm vinyl plank, ${line.sqftPerBox} sq. ft. per box.`,
+      description: `${colour.name} is part of the SG vinyl plank collection (SKU ${sku}). Plank size ${line.thicknessMm}mm x 1220mm x 182mm, ${line.qtyPerBox} planks per box (${line.sqftPerBox} sq. ft.), ${line.boxesPerSkid} boxes per skid (${line.sqftPerSkid} sq. ft.). Wear layer, core composition, installation method and warranty are pending manufacturer confirmation.`,
+      features: [
+        `${line.thicknessMm} mm vinyl plank`,
+        `${line.qtyPerBox} planks per box — ${line.sqftPerBox} sq. ft. coverage`,
+        `${line.boxesPerSkid} boxes per skid (${line.sqftPerSkid} sq. ft.)`,
+        "Full specifications pending manufacturer confirmation",
+      ],
+      price: [null, null, null],
+      unit: "box",
+      stock: ["in_stock", 40],
+      attrs: { colour: colour.name, dimensions: "1220mm x 182mm", thickness: `${line.thicknessMm} mm`, material: "Vinyl" },
+      specs: [
+        ["Plank size", `${line.thicknessMm}mm x 1220mm x 182mm`],
+        ["Qty per box", `${line.qtyPerBox} pc`],
+        ["Coverage per box", `${line.sqftPerBox} sq. ft.`],
+        ["Boxes per skid", `${line.boxesPerSkid} boxes (${line.sqftPerSkid} sq. ft.)`],
+      ],
+      coverage: { perUnit: line.sqftPerBox, unitLabel: "box" },
+      art: ["vinyl", "#9c9c9c", "#6e6e6e", 0],
+      photos: [{ file: "photo.png", alt: `${name} — supplier spec sheet image` }],
+      badges: ["new"],
+      docs: [],
+    };
+  }),
+);
+
+const manualDefs: ProductDef[] = [
   /* ------------------------------ VINYL ------------------------------ */
   {
     key: "harbour-oak-spc",
@@ -1537,6 +1648,8 @@ const defs: ProductDef[] = [
   },
 ];
 
+const defs: ProductDef[] = [...manualDefs, ...sgVinylDefs];
+
 const docLabels = {
   spec: { kind: "spec_sheet", name: "Specification Sheet", sizeKb: 184 },
   install: { kind: "install_guide", name: "Installation Guide", sizeKb: 612 },
@@ -1573,11 +1686,13 @@ export function buildProducts(now = new Date()): Product[] {
     const slug = def.slug ?? slugify(def.name.replace(/—.*$/, "").replace(/"/g, "in"));
     const created = new Date(now.getTime() - (defs.length - index) * 86400000 * 2).toISOString();
     const [retail, sale, contractor] = def.price;
-    const images = [
-      { src: `/media/products/${slug}/1.svg`, alt: `${def.name} — product view` },
-      { src: `/media/products/${slug}/2.svg`, alt: `${def.name} — detail view` },
-    ];
-    if (supportsRoomView(def.art[0], def.art[3])) {
+    const images = def.photos
+      ? def.photos.map((p) => ({ src: `/media/products/${slug}/${p.file}`, alt: p.alt }))
+      : [
+          { src: `/media/products/${slug}/1.svg`, alt: `${def.name} — product view` },
+          { src: `/media/products/${slug}/2.svg`, alt: `${def.name} — detail view` },
+        ];
+    if (!def.photos && supportsRoomView(def.art[0], def.art[3])) {
       images.push({ src: `/media/products/${slug}/3.svg`, alt: `${def.name} — shown in a room setting` });
     }
     const documents: ProductDocument[] = (def.docs ?? []).map((d) => ({
@@ -1594,7 +1709,7 @@ export function buildProducts(now = new Date()): Product[] {
       name: def.name,
       categoryId: def.category,
       subcategory: def.sub,
-      sku: `${code}-${counters[code]}`,
+      sku: def.sku ?? `${code}-${counters[code]}`,
       brand: def.brand,
       shortDescription: def.short,
       description: def.description,
